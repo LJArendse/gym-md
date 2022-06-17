@@ -16,9 +16,9 @@ tiles_names: Final[List[str]] = [
     "potion.png",
     "monster.png",
     "exit.png",
-    "hero.png",
+    "side_kick.png",
     "deadhero.png",
-    "emptypotion.png"
+    "hero_b.png"
 ]
 tiles_paths: Final[List[str]] = [path.join(tiles_dir, t) for t in tiles_names]
 tiles_images = [Image.open(t).convert("RGBA") for t in tiles_paths]

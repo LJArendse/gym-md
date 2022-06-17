@@ -35,7 +35,7 @@ class MdEnvBase(gym.Env):
         self.info: DefaultDict[str, int] = defaultdict(int)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(7,))
         self.observation_space = gym.spaces.Box(
-            low=0, high=30, shape=(8,), dtype=numpy.int32
+            low=0, high=self.setting.DISTANCE_INF, shape=(8,), dtype=numpy.int32
         )
 
     def reset(self) -> List[int]:
@@ -208,7 +208,7 @@ class MdEnvBase(gym.Env):
             sd["E"],
             self.agent.hp,
         ]
-        return ret
+        return numpy.array(ret, dtype=numpy.int32)
 
     def _is_done(self) -> bool:
         """ゲームが終了しているか.

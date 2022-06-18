@@ -14,10 +14,8 @@ class MdCollabEnv(MdEnvBase):
 
     def reset(self) -> List[int]:
         """環境をリセットする."""
-        self.grid.reset()
-        self.agent.reset()
+        super().reset()
         self.c_agent.reset()
-        self.info = defaultdict(int)
         return self._get_observation()
 
     def render(self, mode="human") -> Image:

@@ -5,7 +5,7 @@ T#P#.....P#.
 PM.##.PPM#T.
 #P.#T.MTM.TP
 #.#M.P.T.MM#
-T#...PT..A..
+T#...PT.....
 .MM#M.#..#..
 ##T#.TT.T...
 #PM.P..#.PT#

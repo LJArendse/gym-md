@@ -61,3 +61,8 @@ for i in range(11):
         id=f"md-constant-holmgard-large_{i}-v0",
         entry_point=f"gym_md.envs:ConstantHolmgardLarge{i}MdEnv",
     )
+
+register(
+    id="md-collab-gene_1-v0",
+    entry_point="gym_md.envs:CollaborativeGene1MdEnv",
+)

@@ -2,6 +2,7 @@
 from typing import Final
 
 from gym_md.envs.md_env import MdEnvBase
+from gym_md.envs.md_collab_env import MdCollabEnv
 
 
 class TestMdEnv(MdEnvBase):
@@ -386,3 +387,11 @@ class ConstantHolmgardLarge10MdEnv(MdEnvBase):
     def __init__(self):
         stage_name: Final[str] = "ConstantHolmgardLarge_10"
         super(ConstantHolmgardLarge10MdEnv, self).__init__(stage_name=stage_name)
+
+
+class CollaborativeGene1MdEnv(MdCollabEnv):
+    """Collaborative Gene1MdEnv Random Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_gene_1"
+        super(CollaborativeGene1MdEnv, self).__init__(stage_name=stage_name)

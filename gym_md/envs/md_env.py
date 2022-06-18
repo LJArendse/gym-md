@@ -9,7 +9,6 @@ from PIL import Image
 
 from gym_md.envs.agent.actioner import Actions
 from gym_md.envs.agent.agent import Agent
-from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.grid import Grid
 from gym_md.envs.renderer.renderer import Renderer
 from gym_md.envs.setting import Setting
@@ -30,8 +29,7 @@ class MdEnvBase(gym.Env):
         self.setting: Final[Setting] = Setting(self.stage_name)
         self.grid: Grid = Grid(self.stage_name, self.setting)
         self.agent: Agent = Agent(self.grid, self.setting, self.random)
-        self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
-        self.renderer: Final[Renderer] = Renderer(self.grid, self.agent, self.c_agent, self.setting)
+        self.renderer: Final[Renderer] = Renderer(self.grid, self.agent, self.setting)
         self.info: DefaultDict[str, int] = defaultdict(int)
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(7,))
         self.observation_space = gym.spaces.Box(
@@ -42,7 +40,6 @@ class MdEnvBase(gym.Env):
         """環境をリセットする."""
         self.grid.reset()
         self.agent.reset()
-        self.c_agent.reset()
         self.info = defaultdict(int)
         return self._get_observation()
 

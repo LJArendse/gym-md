@@ -5,7 +5,6 @@ from typing import Final, List
 from PIL import Image
 
 from gym_md.envs.agent.agent import Agent
-from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.grid import Grid
 
 tiles_dir = path.join(path.dirname(__file__), path.pardir, "tiles")
@@ -16,9 +15,8 @@ tiles_names: Final[List[str]] = [
     "potion.png",
     "monster.png",
     "exit.png",
-    "side_kick.png",
+    "hero.png",
     "deadhero.png",
-    "hero_b.png"
 ]
 tiles_paths: Final[List[str]] = [path.join(tiles_dir, t) for t in tiles_names]
 tiles_images = [Image.open(t).convert("RGBA") for t in tiles_paths]
@@ -30,12 +28,11 @@ LENGTH: Final[int] = 20
 class Generator:
     """Generator class."""
 
-    def __init__(self, grid: Grid, agent: Agent, agent_2: CompanionAgent):
+    def __init__(self, grid: Grid, agent: Agent):
         self.grid: Final[Grid] = grid
         self.H: Final[int] = grid.H
         self.W: Final[int] = grid.W
         self.agent: Final[Agent] = agent
-        self.companion_agent: Final[CompanionAgent] = agent_2
 
     def generate(self) -> Image:
         """画像を生成する.
@@ -52,8 +49,5 @@ class Generator:
                 e: int = self.grid[i, j]
                 if i == self.agent.y and j == self.agent.x:
                     e = 6 if self.agent.hp > 0 else 7
-                img.paste(tiles_images[e], (LENGTH * j, i * LENGTH), split_images[e][3])
-                if i == self.companion_agent.y and j == self.companion_agent.x:
-                    e = 8 if self.companion_agent.hp > 0 else 7
                 img.paste(tiles_images[e], (LENGTH * j, i * LENGTH), split_images[e][3])
         return img

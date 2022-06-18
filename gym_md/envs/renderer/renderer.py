@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 from gym_md.envs.agent.agent import Agent
-from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.grid import Grid
 from gym_md.envs.renderer.generator import Generator
 from gym_md.envs.setting import Setting
@@ -14,11 +13,10 @@ from gym_md.envs.setting import Setting
 class Renderer:
     """Renderer class."""
 
-    def __init__(self, grid: Grid, agent: Agent, c_agent: CompanionAgent, setting: Setting):
+    def __init__(self, grid: Grid, agent: Agent, setting: Setting):
         self.grid: Final[Grid] = grid
         self.agent: Final[Agent] = agent
-        self.c_agent: Final[CompanionAgent] = c_agent
-        self.generator: Final[Generator] = Generator(grid=grid, agent=agent, agent_2=c_agent)
+        self.generator: Final[Generator] = Generator(grid=grid, agent=agent)
         self.setting: Final[Setting] = setting
 
     def render(self, mode="human", wait_time: Optional[float] = None) -> Image:

@@ -1,14 +1,22 @@
 from collections import defaultdict
-from typing import Final, List
+from typing import DefaultDict, Dict, Final, List, Tuple
 from PIL import Image
+import numpy
+import gym
 
 from gym_md.envs.md_env import MdEnvBase
 from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.renderer.collab_renderer import CollabRenderer
+from gym_md.envs.agent.actioner import Actions
+
+Joint_Actions = [List[float], List[float]]
 
 class MdCollabEnv(MdEnvBase):
     def __init__(self, stage_name: str):
         super().__init__(stage_name)
+        self.observation_space = gym.spaces.Box(
+            low=0, high=self.setting.DISTANCE_INF, shape=(9,), dtype=numpy.int32
+        )
         self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
 
@@ -17,6 +25,44 @@ class MdCollabEnv(MdEnvBase):
         super().reset()
         self.c_agent.reset()
         return self._get_observation()
+
+    def _get_observation(self) -> List[int]:
+        """環境の観測を取得する.
+
+        Returns
+        -------
+        list of int
+            エージェントにわたす距離の配列 (len: 9)
+        """
+        ret = super()._get_observation()
+        return numpy.append(ret, self.c_agent.hp).astype(numpy.int32)
+
+    def step(self, actions: Joint_Actions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
+        """エージェントが1ステップ行動する.
+
+        Attributes
+        ----------
+        actions: Actions
+            list of int
+            各行動の値を入力する
+
+        Notes
+        -----
+        行動列をすべて入力としている
+        これはある行動をしようとしてもそのマスがない場合があるため
+        その場合は次に大きい値の行動を代わりに行う．
+
+        Returns
+        -------
+        Tuple of (list of int, int, bool, dict)
+        """
+        observation, reward, done, self.info = super().step(actions[0])
+
+        c_action: Final[str] = self.c_agent.select_action(actions[1])
+        self.c_agent.take_action(c_action)
+        self._update_grid()
+
+        return observation, reward, done, self.info
 
     def render(self, mode="human") -> Image:
         """画像の描画を行う.

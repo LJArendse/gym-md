@@ -37,6 +37,16 @@ class MdCollabEnv(MdEnvBase):
         ret = super()._get_observation()
         return numpy.append(ret, self.c_agent.hp).astype(numpy.int32)
 
+    def _is_done(self) -> bool:
+        """ゲームが終了しているか.
+
+        Returns
+        -------
+        bool
+        """
+        agent_1_end = super()._is_done()
+        return agent_1_end or self.c_agent.is_exited() or self.c_agent.is_dead()
+
     def step(self, actions: Joint_Actions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
         """エージェントが1ステップ行動する.
 

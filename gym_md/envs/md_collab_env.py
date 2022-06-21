@@ -9,7 +9,7 @@ from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.renderer.collab_renderer import CollabRenderer
 from gym_md.envs.agent.actioner import Actions
 
-Joint_Actions = [List[float], List[float]]
+JointActions = [List[float], List[float]]
 
 class MdCollabEnv(MdEnvBase):
     def __init__(self, stage_name: str):
@@ -47,7 +47,7 @@ class MdCollabEnv(MdEnvBase):
         agent_1_end = super()._is_done()
         return agent_1_end or self.c_agent.is_exited() or self.c_agent.is_dead()
 
-    def step(self, actions: Joint_Actions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
+    def step(self, actions: JointActions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
         """エージェントが1ステップ行動する.
 
         Attributes

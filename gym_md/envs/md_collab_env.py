@@ -8,6 +8,7 @@ from gym_md.envs.md_env import MdEnvBase
 from gym_md.envs.agent.companion_agent import CompanionAgent
 from gym_md.envs.renderer.collab_renderer import CollabRenderer
 from gym_md.envs.agent.actioner import Actions
+from gym_md.envs.point import Point
 
 JointActions = [List[float], List[float]]
 
@@ -19,6 +20,7 @@ class MdCollabEnv(MdEnvBase):
         )
         self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
+        self.directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 
     def reset(self) -> List[int]:
         """環境をリセットする."""
@@ -46,6 +48,88 @@ class MdCollabEnv(MdEnvBase):
         """
         agent_1_end = super()._is_done()
         return agent_1_end or self.c_agent.is_exited() or self.c_agent.is_dead()
+
+    def __return_position_based_on_action(self, pos: Point, direction: str) -> Point:
+        """Returns a Point based on the input direction.
+
+        Attributes
+        ----------
+        pos: Point
+            Tuple[int, int]
+            The reference point position to be used.
+        direction: str
+            The point direction to return, where direction
+            is a value within ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].
+
+
+        Notes
+        -----
+        A neighbouring position can fall within the following regions:
+           NW                      NORTH                     NE
+                           | -1  || -1  || +1  |
+        WEST               | -1  || pos || +1  |                EAST
+                           | -1  || +1  || +1  |
+           SW                      SOUTH                     SE
+
+        Direction calculations:
+            northwards = (pos[0]-1, pos[1])
+            northeast = (pos[0]-1, pos[1]+1)
+            eastwards = (pos[0], pos[1]+1)
+            southeast = (pos[0]+1, pos[1]+1)
+            southwards = (pos[0]+1, pos[1])
+            southwest = (pos[0]+1, pos[1]-1)
+            westwards = (pos[0], pos[1]-1)
+            northwest = (pos[0]-1, pos[1]-1)
+
+        Returns
+        -------
+        Point
+        """
+        if direction == 'n':
+            return (pos[0]-1, pos[1])
+        elif direction == 'ne':
+            return (pos[0]-1, pos[1]+1)
+        elif direction == 'e':
+            return (pos[0], pos[1]+1)
+        elif direction == 'se':
+            return (pos[0]+1, pos[1]+1)
+        elif direction == 's':
+            return (pos[0]+1, pos[1])
+        elif direction == 'sw':
+            return (pos[0]+1, pos[1]-1)
+        elif direction == 'w':
+            return (pos[0], pos[1]-1)
+        elif direction == 'nw':
+            return (pos[0]-1, pos[1]-1)
+
+    def _companion_in_range(self) -> bool:
+        """Return true is companion agent is near main agent.
+
+        Returns
+        -------
+        bool
+        """
+        pos = (self.agent.y, self.agent.x)
+        neighbours = [self.__return_position_based_on_action(pos, d) for d in self.directions]
+        return True if (self.c_agent.y, self.c_agent.x) in neighbours else False
+
+    def _update_grid(self) -> None:
+        """グリッドの状態を更新する.
+
+        Notes
+        -----
+        メソッド内でグリッドの状態を**直接更新している**ことに注意．
+
+        Returns
+        -------
+        None
+        """
+        agent_y, agent_x = self.agent.y, self.agent.x
+        C = self.setting.CHARACTER_TO_NUM
+        if self.agent.hp <= 0:
+            return
+        if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]) and (self._companion_in_range()):
+            self.grid[agent_y, agent_x] = C["."]
 
     def step(self, actions: JointActions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
         """エージェントが1ステップ行動する.

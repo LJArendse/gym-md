@@ -131,6 +131,31 @@ class MdCollabEnv(MdEnvBase):
         if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]) and (self._companion_in_range()):
             self.grid[agent_y, agent_x] = C["."]
 
+    def _get_reward(self) -> float:
+        """報酬を計算する.
+
+        Returns
+        -------
+        int
+            報酬
+
+        """
+        R = self.setting.REWARDS
+        C = self.setting.CHARACTER_TO_NUM
+        ret: float = -R.TURN
+        y, x = self.agent.y, self.agent.x
+        if self.agent.hp <= 0:
+            return ret + R.DEAD
+        if (self.grid[y, x] == C["T"]) and (self._companion_in_range()):
+            ret += R.TREASURE
+        if (self.grid[y, x] == C["E"]):
+            ret += R.EXIT
+        if (self.grid[y, x] == C["M"]) and (self._companion_in_range()):
+            ret += R.KILL
+        if (self.grid[y, x] == C["P"]) and (self._companion_in_range()):
+            ret += R.POTION
+        return ret
+
     def step(self, actions: JointActions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
         """エージェントが1ステップ行動する.
 
@@ -154,6 +179,8 @@ class MdCollabEnv(MdEnvBase):
 
         c_action: Final[str] = self.c_agent.select_action(actions[1])
         self.c_agent.take_action(c_action)
+        reward: int = self._get_reward()
+        done: bool = self._is_done()
         self._update_grid()
 
         return observation, reward, done, self.info

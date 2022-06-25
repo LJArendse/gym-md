@@ -66,3 +66,8 @@ register(
     id="md-collab-gene_1-v0",
     entry_point="gym_md.envs:CollaborativeGene1MdEnv",
 )
+
+register(
+    id="md-collab-test-v0",
+    entry_point="gym_md.envs:CollaborativeTestMdEnv",
+)

@@ -395,3 +395,11 @@ class CollaborativeGene1MdEnv(MdCollabEnv):
     def __init__(self):
         stage_name: Final[str] = "collab_gene_1"
         super(CollaborativeGene1MdEnv, self).__init__(stage_name=stage_name)
+
+
+class CollaborativeTestMdEnv(MdCollabEnv):
+    """Collaborative TestMdEnv Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_test"
+        super(CollaborativeTestMdEnv, self).__init__(stage_name=stage_name)

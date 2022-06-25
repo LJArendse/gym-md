@@ -16,7 +16,7 @@ class MdCollabEnv(MdEnvBase):
     def __init__(self, stage_name: str):
         super().__init__(stage_name)
         self.observation_space = gym.spaces.Box(
-            low=0, high=self.setting.DISTANCE_INF, shape=(9,), dtype=numpy.int32
+            low=0, high=self.setting.DISTANCE_INF, shape=(16,), dtype=numpy.int32
         )
         self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
@@ -28,6 +28,34 @@ class MdCollabEnv(MdEnvBase):
         self.c_agent.reset()
         return self._get_observation()
 
+    def _get_observation_c_agent(self) -> List[int]:
+        """環境の観測を取得する.
+
+        Returns
+        -------
+        list of int
+            エージェントにわたす距離の配列 (len: 8)
+        """
+        sd, _ = self.c_agent.path.get_distance_and_prev(
+            y=self.c_agent.y, x=self.c_agent.x, safe=True
+        )
+        ud, _ = self.c_agent.path.get_distance_and_prev(
+            y=self.c_agent.y, x=self.c_agent.x, safe=False
+        )
+        sd = self.c_agent.path.get_nearest_distance(sd)
+        ud = self.c_agent.path.get_nearest_distance(ud)
+        ret = [
+            ud["M"],
+            ud["T"],
+            sd["T"],
+            ud["P"],
+            sd["P"],
+            ud["E"],
+            sd["E"],
+            self.c_agent.hp,
+        ]
+        return numpy.array(ret, dtype=numpy.int32)
+
     def _get_observation(self) -> List[int]:
         """環境の観測を取得する.
 
@@ -37,7 +65,8 @@ class MdCollabEnv(MdEnvBase):
             エージェントにわたす距離の配列 (len: 9)
         """
         ret = super()._get_observation()
-        return numpy.append(ret, self.c_agent.hp).astype(numpy.int32)
+        c_ret = self._get_observation_c_agent()
+        return numpy.append(ret, c_ret).astype(numpy.int32)
 
     def _is_done(self) -> bool:
         """ゲームが終了しているか.

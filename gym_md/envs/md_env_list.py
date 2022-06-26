@@ -403,3 +403,10 @@ class CollaborativeTestMdEnv(MdCollabEnv):
     def __init__(self):
         stage_name: Final[str] = "collab_test"
         super(CollaborativeTestMdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeSimpleMdEnv(MdCollabEnv):
+    """Collaborative SimpleMdEnv Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_simple"
+        super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name)

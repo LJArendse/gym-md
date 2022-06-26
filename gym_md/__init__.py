@@ -71,3 +71,8 @@ register(
     id="md-collab-test-v0",
     entry_point="gym_md.envs:CollaborativeTestMdEnv",
 )
+
+register(
+    id="md-collab-simple-v0",
+    entry_point="gym_md.envs:CollaborativeSimpleMdEnv",
+)

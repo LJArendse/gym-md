@@ -20,11 +20,33 @@ class CompanionAgent(Agent):
             初期座標を返す
 
         """
+        self.grid_free_spaces: List[Point] = []
+        for i in range(self.grid.H):
+            for j in range(self.grid.W):
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["A"]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["S"]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["."]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["M"]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["T"]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["P"]:
+                    self.grid_free_spaces.append((i,j))
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["E"]:
+                    self.grid_free_spaces.append((i,j))
+
+
         for i in range(self.grid.H):
             for j in range(self.grid.W):
                 if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["A"]:
                     self.grid[i, j] = self.setting.CHARACTER_TO_NUM["."]
+                    self.grid_free_spaces.append((i,j))
                     return i, j
+
+
 
     def __return_position_based_on_action(self, pos: Point, action: str) -> Point:
         """Returns a new Point position based on the input directional action.
@@ -57,16 +79,27 @@ class CompanionAgent(Agent):
         -------
         Point
         """
+        new_pos = None
         if action == 'UP':
-            return (pos[0]-1, pos[1])
+            new_pos = (pos[0]-1, pos[1])
         elif action == 'DOWN':
-            return (pos[0]+1, pos[1])
+            new_pos = (pos[0]+1, pos[1])
         elif action == 'LEFT':
-            return (pos[0], pos[1]-1)
+            new_pos = (pos[0], pos[1]-1)
         elif action == 'RIGHT':
-            return (pos[0], pos[1]+1)
+            new_pos = (pos[0], pos[1]+1)
 
-    def select_directional_action(self, actions: Actions) -> str:
+
+        #print(pos)
+        #print(new_pos)
+        #print(self.grid_free_spaces)
+        #print(new_pos in self.grid_free_spaces)
+        if new_pos in self.grid_free_spaces:
+            return new_pos
+        else:
+            return pos
+
+    def select_action(self, actions: Actions) -> str:
         """行動を選択する.
 
         Notes
@@ -103,7 +136,7 @@ class CompanionAgent(Agent):
         return action_out
 
 
-    def take_directional_action(self, action: str) -> None:
+    def take_action(self, action: str) -> None:
         agent_pos = (self.y, self.x)
         new_pos = self.__return_position_based_on_action(agent_pos, action)
         self.y, self.x = new_pos

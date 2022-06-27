@@ -7,19 +7,7 @@ from gym_md.envs.agent.actioner import Actions
 
 
 class CompanionAgent(Agent):
-    def _init_player_pos(self) -> Point:
-        """プレイヤーの座標を初期化して座標を返す.
-
-        Notes
-        -----
-        初期座標を表すSを'.'にメソッド内で書き換えていることに注意する．
-
-        Returns
-        -------
-        Point
-            初期座標を返す
-
-        """
+    def _generate_free_spaces_list(self):
         self.grid_free_spaces: List[Point] = []
         for i in range(self.grid.H):
             for j in range(self.grid.W):
@@ -38,6 +26,20 @@ class CompanionAgent(Agent):
                 if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["E"]:
                     self.grid_free_spaces.append((i,j))
 
+    def _init_player_pos(self) -> Point:
+        """プレイヤーの座標を初期化して座標を返す.
+
+        Notes
+        -----
+        初期座標を表すSを'.'にメソッド内で書き換えていることに注意する．
+
+        Returns
+        -------
+        Point
+            初期座標を返す
+
+        """
+        self._generate_free_spaces_list()
 
         for i in range(self.grid.H):
             for j in range(self.grid.W):
@@ -45,8 +47,6 @@ class CompanionAgent(Agent):
                     self.grid[i, j] = self.setting.CHARACTER_TO_NUM["."]
                     self.grid_free_spaces.append((i,j))
                     return i, j
-
-
 
     def __return_position_based_on_action(self, pos: Point, action: str) -> Point:
         """Returns a new Point position based on the input directional action.
@@ -89,11 +89,6 @@ class CompanionAgent(Agent):
         elif action == 'RIGHT':
             new_pos = (pos[0], pos[1]+1)
 
-
-        #print(pos)
-        #print(new_pos)
-        #print(self.grid_free_spaces)
-        #print(new_pos in self.grid_free_spaces)
         if new_pos in self.grid_free_spaces:
             return new_pos
         else:
@@ -120,9 +115,6 @@ class CompanionAgent(Agent):
         str
             選択した行動IDを返す
         """
-        #import random
-        #actions = [1.0,0.9,1.0,0.2]
-        #from typing import List, Tuple
         actions_idx: List[Tuple[float, int]] = [(actions[i], i) for i in range(len(actions))]
         actions_idx.sort(key=lambda z: (-z[0], -z[1]))
 
@@ -130,11 +122,9 @@ class CompanionAgent(Agent):
         max_actions = [i[1] for i in actions_idx if i[0]==max_value]
         random.shuffle(max_actions)
 
-        #NUM_TO_DIRECTIONAL_ACTION =  {0: 'UP', 1: 'DOWN', 2: 'LEFT', 3: 'RIGHT'}
+        # NUM_TO_DIRECTIONAL_ACTION =  {0: 'UP', 1: 'DOWN', 2: 'LEFT', 3: 'RIGHT'}
         action_out = self.setting.NUM_TO_DIRECTIONAL_ACTION[max_actions[0]]
-        #print(action_out)
         return action_out
-
 
     def take_action(self, action: str) -> None:
         agent_pos = (self.y, self.x)

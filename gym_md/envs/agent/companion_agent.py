@@ -150,3 +150,27 @@ class CompanionAgent(Agent):
         new_pos = self.__return_position_based_on_action(agent_pos, action)
         self.y, self.x = new_pos
         self.be_influenced(y=self.y, x=self.x)
+
+
+class DirectionalAgent(CompanionAgent):
+    def _init_player_pos(self) -> Point:
+        """プレイヤーの座標を初期化して座標を返す.
+
+        Notes
+        -----
+        初期座標を表すSを'.'にメソッド内で書き換えていることに注意する．
+
+        Returns
+        -------
+        Point
+            初期座標を返す
+
+        """
+        self._generate_free_spaces_list()
+
+        for i in range(self.grid.H):
+            for j in range(self.grid.W):
+                if self.grid[i, j] == self.setting.CHARACTER_TO_NUM["S"]:
+                    self.grid[i, j] = self.setting.CHARACTER_TO_NUM["."]
+                    self.grid_free_spaces.append((i,j))
+                    return i, j

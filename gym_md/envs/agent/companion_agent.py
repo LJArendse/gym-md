@@ -66,7 +66,7 @@ class CompanionAgent(Agent):
         elif action == 'RIGHT':
             return (pos[0], pos[1]+1)
 
-    def select_action(self, actions: Actions) -> str:
+    def select_directional_action(self, actions: Actions) -> str:
         """行動を選択する.
 
         Notes
@@ -103,7 +103,7 @@ class CompanionAgent(Agent):
         return action_out
 
 
-    def take_action(self, action: str) -> None:
+    def take_directional_action(self, action: str) -> None:
         agent_pos = (self.y, self.x)
         new_pos = self.__return_position_based_on_action(agent_pos, action)
         self.y, self.x = new_pos

@@ -407,6 +407,6 @@ class CollaborativeTestMdEnv(MdCollabEnv):
 class CollaborativeSimpleMdEnv(MdCollabEnv):
     """Collaborative SimpleMdEnv Class."""
 
-    def __init__(self):
+    def __init__(self, action_type: str = 'path'):
         stage_name: Final[str] = "collab_simple"
-        super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name)
+        super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name, action_type=action_type)

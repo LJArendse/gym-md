@@ -1,12 +1,19 @@
 from typing import List, Tuple
 import random
+from random import Random
 
 from gym_md.envs.agent.agent import Agent
 from gym_md.envs.point import Point
 from gym_md.envs.agent.actioner import Actions
+from gym_md.envs.grid import Grid
+from gym_md.envs.setting import Setting
 
 
 class CompanionAgent(Agent):
+    def __init__(self, grid: Grid, setting: Setting, random: Random, action_type: str):
+        super().__init__(grid, setting, random)
+        self.action_type = action_type
+
     def _generate_free_spaces_list(self):
         self.grid_free_spaces: List[Point] = []
         for i in range(self.grid.H):
@@ -95,6 +102,12 @@ class CompanionAgent(Agent):
             return pos
 
     def select_action(self, actions: Actions) -> str:
+        if self.action_type == 'directional':
+            return self.select_directional_action(actions)
+        else:
+            return super().select_action(actions)
+
+    def select_directional_action(self, actions: Actions) -> str:
         """行動を選択する.
 
         Notes
@@ -127,6 +140,12 @@ class CompanionAgent(Agent):
         return action_out
 
     def take_action(self, action: str) -> None:
+        if self.action_type == 'directional':
+            return self.take_directional_action(action)
+        else:
+            return super().take_action(action)
+
+    def take_directional_action(self, action: str) -> None:
         agent_pos = (self.y, self.x)
         new_pos = self.__return_position_based_on_action(agent_pos, action)
         self.y, self.x = new_pos

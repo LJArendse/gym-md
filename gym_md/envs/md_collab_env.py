@@ -15,7 +15,7 @@ from gym_md.envs.definition import DIRECTIONAL_ACTIONS
 JointActions = [List[float], List[float]]
 
 class MdCollabEnv(MdEnvBase):
-    def __init__(self, stage_name: str):
+    def __init__(self, stage_name: str, action_type='path'):
         super().__init__(stage_name)
 
         self.setting.DIRECTIONAL_ACTIONS: Final[List[str]] = DIRECTIONAL_ACTIONS
@@ -25,7 +25,8 @@ class MdCollabEnv(MdEnvBase):
         self.observation_space = gym.spaces.Box(
             low=0, high=self.setting.DISTANCE_INF, shape=(16,), dtype=numpy.int32
         )
-        self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
+        self.action_type = action_type
+        self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random, self.action_type)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
         self.directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 

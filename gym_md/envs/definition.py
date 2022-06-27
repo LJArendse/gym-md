@@ -30,6 +30,12 @@ ACTIONS: Final[List[str]] = [
     "EXIT",
     "EXIT_SAFELY",
 ]
+DIRECTIONAL_ACTIONS: Final[List[str]] = [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+]
 CUSTOM_PROPS: Final[List[str]] = [
     "PLAYER_MAX_HP",
     "ENEMY_POWER",

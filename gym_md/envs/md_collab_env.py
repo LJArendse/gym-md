@@ -3,29 +3,44 @@ from typing import DefaultDict, Dict, Final, List, Tuple
 from PIL import Image
 import numpy
 import gym
+from random import Random
 
 from gym_md.envs.md_env import MdEnvBase
-from gym_md.envs.agent.companion_agent import CompanionAgent
+from gym_md.envs.agent.agent import Agent
+from gym_md.envs.agent.companion_agent import CompanionAgent, DirectionalAgent
 from gym_md.envs.renderer.collab_renderer import CollabRenderer
 from gym_md.envs.agent.actioner import Actions
 from gym_md.envs.point import Point
 from gym_md.envs.setting import Setting
 from gym_md.envs.definition import DIRECTIONAL_ACTIONS
+from gym_md.envs.grid import Grid
 
 JointActions = [List[float], List[float]]
 
 class MdCollabEnv(MdEnvBase):
     def __init__(self, stage_name: str, action_type='path'):
-        super().__init__(stage_name)
 
+        self.random = Random()
+        self.stage_name: Final[str] = stage_name
+
+        self.setting: Final[Setting] = Setting(self.stage_name)
         self.setting.DIRECTIONAL_ACTIONS: Final[List[str]] = DIRECTIONAL_ACTIONS
         self.setting.DIRECTIONAL_ACTION_TO_NUM: Final[Dict[str, int]] = Setting.list_to_dict(self.setting.DIRECTIONAL_ACTIONS)
         self.setting.NUM_TO_DIRECTIONAL_ACTION: Final[Dict[int, str]] = Setting.swap_dict(self.setting.DIRECTIONAL_ACTION_TO_NUM)
 
+        self.grid: Grid = Grid(self.stage_name, self.setting)
+        self.info: DefaultDict[str, int] = defaultdict(int)
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(7,))
         self.observation_space = gym.spaces.Box(
             low=0, high=self.setting.DISTANCE_INF, shape=(16,), dtype=numpy.int32
         )
+
         self.action_type = action_type
+        if self.action_type=='directional':
+            self.agent: DirectionalAgent = DirectionalAgent(self.grid, self.setting, self.random, self.action_type)
+        else:
+            self.agent: Agent = Agent(self.grid, self.setting, self.random)
+
         self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random, self.action_type)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
         self.directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']

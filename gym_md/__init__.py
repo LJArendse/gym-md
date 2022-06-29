@@ -76,3 +76,8 @@ register(
     id="md-collab-simple-v0",
     entry_point="gym_md.envs:CollaborativeSimpleMdEnv",
 )
+
+register(
+    id="md-collab-holmgard_1-v0",
+    entry_point="gym_md.envs:CollaborativeHolmgard1MdEnv",
+)

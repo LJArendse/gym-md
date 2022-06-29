@@ -55,4 +55,5 @@ from gym_md.envs.md_env_list import (
     CollaborativeGene1MdEnv,
     CollaborativeTestMdEnv,
     CollaborativeSimpleMdEnv,
+    CollaborativeHolmgard1MdEnv,
 )

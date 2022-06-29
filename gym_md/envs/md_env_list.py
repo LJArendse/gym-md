@@ -410,3 +410,10 @@ class CollaborativeSimpleMdEnv(MdCollabEnv):
     def __init__(self, action_type: str = 'path'):
         stage_name: Final[str] = "collab_simple"
         super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name, action_type=action_type)
+
+class CollaborativeHolmgard1MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 1 Class."""
+
+    def __init__(self, action_type: str = 'path'):
+        stage_name: Final[str] = "collab_holmgard_1"
+        super(CollaborativeHolmgard1MdEnv, self).__init__(stage_name=stage_name, action_type=action_type)

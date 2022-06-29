@@ -35,7 +35,7 @@ class CollabGenerator(Generator):
 
         self.LENGTH: Final[int] = 20
 
-    def generate_standard_sprites(self) -> Image:
+    def generate(self) -> Image:
         """画像を生成する.
 
         Returns
@@ -55,7 +55,7 @@ class CollabGenerator(Generator):
         img.paste(sprite, (LENGTH * self.companion_agent.x, self.companion_agent.y * LENGTH), sprite_split_image[3])
         return img
 
-    def generate(self) -> Image:
+    def generate_alternative_sprites(self) -> Image:
         """画像を生成する.
 
         Returns

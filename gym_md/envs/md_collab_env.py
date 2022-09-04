@@ -180,7 +180,14 @@ class MdCollabEnv(MdEnvBase):
         C = self.setting.CHARACTER_TO_NUM
         if self.agent.hp <= 0:
             return
-        if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]) and (self._companion_in_range()):
+        if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]):
+            self.grid[agent_y, agent_x] = C["."]
+
+        agent_y, agent_x = self.c_agent.y, self.c_agent.x
+        C = self.setting.CHARACTER_TO_NUM
+        if self.c_agent.hp <= 0:
+            return
+        if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]):
             self.grid[agent_y, agent_x] = C["."]
 
     def _get_reward(self) -> float:
@@ -198,14 +205,27 @@ class MdCollabEnv(MdEnvBase):
         y, x = self.agent.y, self.agent.x
         if self.agent.hp <= 0:
             return ret + R.DEAD
-        if (self.grid[y, x] == C["T"]) and (self._companion_in_range()):
+        if (self.grid[y, x] == C["T"]):
             ret += R.TREASURE
         if (self.grid[y, x] == C["E"]):
             ret += R.EXIT
-        if (self.grid[y, x] == C["M"]) and (self._companion_in_range()):
+        if (self.grid[y, x] == C["M"]):
             ret += R.KILL
-        if (self.grid[y, x] == C["P"]) and (self._companion_in_range()):
+        if (self.grid[y, x] == C["P"]):
             ret += R.POTION
+
+        y, x = self.c_agent.y, self.c_agent.x
+        if self.c_agent.hp <= 0:
+            return ret + R.DEAD
+        if (self.grid[y, x] == C["T"]):
+            ret += R.TREASURE
+        if (self.grid[y, x] == C["E"]):
+            ret += R.EXIT
+        if (self.grid[y, x] == C["M"]):
+            ret += R.KILL
+        if (self.grid[y, x] == C["P"]):
+            ret += R.POTION
+
         return ret
 
     def step(self, actions: JointActions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
@@ -227,15 +247,15 @@ class MdCollabEnv(MdEnvBase):
         -------
         Tuple of (list of int, int, bool, dict)
         """
-        observation, reward, done, self.info = super().step(actions[0])
+        observation, reward_agent_1, done, self.info = super().step(actions[0])
 
         c_action: Final[str] = self.c_agent.select_action(actions[1])
         self.c_agent.take_action(c_action)
-        reward: int = self._get_reward()
+        reward_agent_2: int = self._get_reward()
         done: bool = self._is_done()
         self._update_grid()
 
-        return observation, reward, done, self.info
+        return observation, reward_agent_1+reward_agent_2, done, self.info
 
     def render(self, mode="human") -> Image:
         """画像の描画を行う.

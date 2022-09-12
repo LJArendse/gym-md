@@ -90,7 +90,7 @@ class MdCollabEnv(MdEnvBase):
         if (self.grid[agent_y, agent_x] in [C["P"], C["M"], C["T"]]):
             self.grid[agent_y, agent_x] = C["."]
 
-    def _get_reward(self) -> float:
+    def _get_companion_reward(self) -> float:
         """報酬を計算する.
 
         Returns
@@ -99,8 +99,6 @@ class MdCollabEnv(MdEnvBase):
             報酬
 
         """
-        agent_1_reward = super()._get_reward()
-
         R = self.setting.REWARDS
         C = self.setting.CHARACTER_TO_NUM
         companion_agent_reward: float = -R.TURN
@@ -116,7 +114,7 @@ class MdCollabEnv(MdEnvBase):
         if (self.grid[y, x] == C["P"]):
             companion_agent_reward += R.POTION
 
-        return agent_1_reward+companion_agent_reward
+        return companion_agent_reward
 
     def step(self, actions: JointActions) -> Tuple[List[int], int, bool, DefaultDict[str, int]]:
         """エージェントが1ステップ行動する.
@@ -141,7 +139,7 @@ class MdCollabEnv(MdEnvBase):
 
         c_action: Final[str] = self.c_agent.select_action(actions[1])
         self.c_agent.take_action(c_action)
-        reward_agent_2: int = self._get_reward()
+        reward_agent_2: int = self._get_companion_reward()
         done: bool = self._is_done()
         self._update_grid()
 

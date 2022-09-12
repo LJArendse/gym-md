@@ -1,6 +1,7 @@
 from typing import DefaultDict, Final, List, Tuple
 from PIL import Image
 import numpy
+import gym
 
 from gym_md.envs.md_env import MdEnvBase
 from gym_md.envs.agent.companion_agent import CompanionAgent
@@ -23,7 +24,10 @@ class MdCollabEnv(MdEnvBase):
         Initialise a MdCollabEnv object using the
         stage_name as input.
         """
-        super.init(stage_name)
+        super().__init__(stage_name)
+        self.observation_space = gym.spaces.Box(
+            low=0, high=self.setting.DISTANCE_INF, shape=(16,), dtype=numpy.int32
+        )
         self.c_agent: CompanionAgent = CompanionAgent(self.grid, self.setting, self.random)
         self.c_renderer: Final[CollabRenderer] = CollabRenderer(self.grid, self.agent, self.setting, self.c_agent)
 

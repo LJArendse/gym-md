@@ -407,13 +407,13 @@ class CollaborativeTestMdEnv(MdCollabEnv):
 class CollaborativeSimpleMdEnv(MdCollabEnv):
     """Collaborative SimpleMdEnv Class."""
 
-    def __init__(self, action_type: str = 'path'):
+    def __init__(self):
         stage_name: Final[str] = "collab_simple"
-        super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name, action_type=action_type)
+        super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name)
 
 class CollaborativeHolmgard1MdEnv(MdCollabEnv):
     """Collaborative Holmgard 1 Class."""
 
-    def __init__(self, action_type: str = 'path'):
+    def __init__(self):
         stage_name: Final[str] = "collab_holmgard_1"
-        super(CollaborativeHolmgard1MdEnv, self).__init__(stage_name=stage_name, action_type=action_type)
+        super(CollaborativeHolmgard1MdEnv, self).__init__(stage_name=stage_name)

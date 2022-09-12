@@ -105,13 +105,13 @@ class MdCollabEnv(MdEnvBase):
         y, x = self.c_agent.y, self.c_agent.x
         if self.c_agent.hp <= 0:
             return companion_agent_reward + R.DEAD
-        if (self.grid[y, x] == C["T"]):
+        if self.grid[y, x] == C["T"]:
             companion_agent_reward += R.TREASURE
-        if (self.grid[y, x] == C["E"]):
+        if self.grid[y, x] == C["E"]:
             companion_agent_reward += R.EXIT
-        if (self.grid[y, x] == C["M"]):
+        if self.grid[y, x] == C["M"]:
             companion_agent_reward += R.KILL
-        if (self.grid[y, x] == C["P"]):
+        if self.grid[y, x] == C["P"]:
             companion_agent_reward += R.POTION
 
         return companion_agent_reward

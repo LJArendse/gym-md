@@ -1,5 +1,5 @@
 """gym-md init module."""
-__version__ = "0.5.14"
+__version__ = "0.5.15"
 
 from logging import NullHandler, getLogger
 
@@ -77,7 +77,8 @@ register(
     entry_point="gym_md.envs:CollaborativeSimpleMdEnv",
 )
 
-register(
-    id="md-collab-holmgard_1-v0",
-    entry_point="gym_md.envs:CollaborativeHolmgard1MdEnv",
-)
+for i in range(11):
+    register(
+        id=f"md-collab-holmgard_{i}-v0",
+        entry_point=f"gym_md.envs:CollaborativeHolmgard{i}MdEnv",
+    )

@@ -411,9 +411,79 @@ class CollaborativeSimpleMdEnv(MdCollabEnv):
         stage_name: Final[str] = "collab_simple"
         super(CollaborativeSimpleMdEnv, self).__init__(stage_name=stage_name)
 
+class CollaborativeHolmgard0MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 0 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_0"
+        super(CollaborativeHolmgard0MdEnv, self).__init__(stage_name=stage_name)
+
 class CollaborativeHolmgard1MdEnv(MdCollabEnv):
     """Collaborative Holmgard 1 Class."""
 
     def __init__(self):
         stage_name: Final[str] = "collab_holmgard_1"
         super(CollaborativeHolmgard1MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard2MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 2 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_2"
+        super(CollaborativeHolmgard2MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard3MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 3 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_3"
+        super(CollaborativeHolmgard3MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard4MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 4 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_4"
+        super(CollaborativeHolmgard4MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard5MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 5 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_5"
+        super(CollaborativeHolmgard5MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard6MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 6 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_6"
+        super(CollaborativeHolmgard6MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard7MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 7 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_7"
+        super(CollaborativeHolmgard7MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard8MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 8 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_8"
+        super(CollaborativeHolmgard8MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard9MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 9 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_9"
+        super(CollaborativeHolmgard9MdEnv, self).__init__(stage_name=stage_name)
+
+class CollaborativeHolmgard10MdEnv(MdCollabEnv):
+    """Collaborative Holmgard 10 Class."""
+
+    def __init__(self):
+        stage_name: Final[str] = "collab_holmgard_10"
+        super(CollaborativeHolmgard10MdEnv, self).__init__(stage_name=stage_name)
